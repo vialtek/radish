@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"gonum.org/v1/gonum/mat"
+
+	"github.com/vialtek/radish/radish"
 )
 
 func main() {
@@ -21,4 +23,12 @@ func main() {
 
 	fc := mat.Formatted(&c, mat.Prefix("     "), mat.Squeeze())
 	fmt.Printf("Mul two matrixes:\n c = %v\n\n", fc)
+
+	model := radish.NewSequentialModel()
+
+	model.AddLayer(radish.NewDenseLayer(4, 4, "relu"))
+	model.AddLayer(radish.NewDenseLayer(4, 2, "relu"))
+
+	inputData := mat.NewDense(1, 4, []float64{1, 1, 0, 0})
+	fmt.Println(model.ForwardProp(inputData))
 }
