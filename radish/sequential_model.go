@@ -9,7 +9,7 @@ type layer interface {
 }
 
 type SequentialModel struct {
-	layers []*layer
+	layers []layer
 }
 
 func NewSequentialModel() *SequentialModel {
@@ -17,15 +17,15 @@ func NewSequentialModel() *SequentialModel {
 }
 
 func (m *SequentialModel) AddLayer(newLayer layer){
-	m.layers = append(m.layers, &newLayer)
+	m.layers = append(m.layers, newLayer)
 }
 
 func (m *SequentialModel) ForwardProp(input *mat.Dense) *mat.Dense {
 	curY := input
 
-	//for _, layer := range m.layers {
-		//curY = layer.ForwardProp(curY)
-	//}
+	for _, layer := range m.layers {
+		curY = layer.ForwardProp(curY)
+	}
 
 	return curY
 }

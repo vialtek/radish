@@ -31,7 +31,10 @@ func (l *DenseLayer) ForwardProp(input *mat.Dense) *mat.Dense {
 	bias := mat.NewDense(1, 1, []float64{1})
 	fullInput.Augment(input, bias)
 	output.Mul(&fullInput, l.Weights)
-	//activatedOutput.Apply(l.activationElem, &output)
 
+	return &output
+	
+	// TODO: add activation
+	//activatedOutput.Apply(l.activationElem, &output)
 	return &activatedOutput
 }
