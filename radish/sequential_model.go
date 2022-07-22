@@ -16,7 +16,7 @@ func NewSequentialModel() *SequentialModel {
 	return &SequentialModel{}
 }
 
-func (m *SequentialModel) AddLayer(newLayer layer){
+func (m *SequentialModel) AddLayer(newLayer layer) {
 	m.layers = append(m.layers, newLayer)
 }
 

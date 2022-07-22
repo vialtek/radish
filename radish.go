@@ -17,5 +17,5 @@ func main() {
 	outputData := model.ForwardProp(inputData)
 
 	formatedOutput := mat.Formatted(outputData, mat.Prefix("     "), mat.Squeeze())
-  fmt.Printf("Result: %v\n\n", formatedOutput)  
+	fmt.Printf("Result: %v\n\n", formatedOutput)
 }
