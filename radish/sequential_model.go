@@ -20,7 +20,7 @@ func (m *SequentialModel) AddLayer(newLayer layer) {
 	m.layers = append(m.layers, newLayer)
 }
 
-func (m *SequentialModel) ForwardProp(input *mat.Dense) *mat.Dense {
+func (m *SequentialModel) Evaluate(input *mat.Dense) *mat.Dense {
 	curY := input
 
 	for _, layer := range m.layers {

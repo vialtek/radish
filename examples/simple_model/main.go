@@ -13,7 +13,7 @@ func main() {
 	model.AddLayer(radish.NewDenseLayer(4, 2, "relu"))
 
 	inputData := mat.NewDense(1, 4, []float64{1, 1, 0, 0})
-	outputData := model.ForwardProp(inputData)
+	outputData := model.Evaluate(inputData)
 
 	radish.PrintMatrix(outputData, "Output")
 }
