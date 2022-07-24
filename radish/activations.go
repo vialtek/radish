@@ -10,6 +10,8 @@ func (l *DenseLayer) activationElem(i, j int, elem float64) float64 {
 		return relu(elem)
 	case "sigmoid":
 		return sigmoid(elem)
+	case "tanh":
+		return tanh(elem)
 	default:
 		return elem
 	}
@@ -29,4 +31,12 @@ func relu(elem float64) float64 {
 	}
 
 	return elem
+}
+
+func tanh(elem float64) float64 {
+	return math.Tanh(elem)
+}
+
+func tanhPrime(elem float64) float64 {
+	return 1 - math.Pow(math.Tanh(elem), 2)
 }
