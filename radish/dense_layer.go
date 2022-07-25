@@ -36,16 +36,20 @@ func (l *DenseLayer) ForwardProp(input *mat.Dense) *mat.Dense {
 }
 
 // FIXME: activation is not accounted
+// TODO: do we need backwardIn, backwardOut and forwardOut?
+//       ... maybe just store forward tensor?
 func (l *DenseLayer) BackwardProp(input *mat.Dense) *mat.Dense {
 	var dL_dy, dy_dw, dy_dx, dL_dw, dL_dx mat.Dense
 
 	l.backwardIn.Copy(input)
-	
+
 	dL_dy.Copy(&l.backwardIn)
 	dy_dw.Copy(&l.forwardIn)
 	dy_dx.Copy(l.Weights)
 
 	dL_dw.Mul(dy_dw.T(), &dL_dy)
+	// TODO: update weights here
+
 	dL_dx.Mul(&dL_dy, dy_dx.T())
 
 	l.backwardOut.Copy(&dL_dx)
