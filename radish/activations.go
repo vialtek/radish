@@ -4,7 +4,7 @@ import (
 	"math"
 )
 
-func (l *DenseLayer) activationElem(i, j int, elem float64) float64 {
+func (l *DenseLayer) activationForward(i, j int, elem float64) float64 {
 	switch l.activation {
 	case "relu":
 		return relu(elem)
@@ -12,6 +12,19 @@ func (l *DenseLayer) activationElem(i, j int, elem float64) float64 {
 		return sigmoid(elem)
 	case "tanh":
 		return tanh(elem)
+	default:
+		return elem
+	}
+}
+
+func (l *DenseLayer) activationBackward(i, j int, elem float64) float64 {
+	switch l.activation {
+	case "relu":
+		return reluPrime(elem)
+	case "sigmoid":
+		return sigmoidPrime(elem)
+	case "tanh":
+		return tanhPrime(elem)
 	default:
 		return elem
 	}
@@ -31,6 +44,14 @@ func relu(elem float64) float64 {
 	}
 
 	return elem
+}
+
+func reluPrime(elem float64) float64 {
+	if elem > 0 {
+		return 1
+	}
+
+	return 0
 }
 
 func tanh(elem float64) float64 {

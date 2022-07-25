@@ -1,11 +1,13 @@
 package radish
 
 import (
+	"fmt"
 	"gonum.org/v1/gonum/mat"
 )
 
 type layer interface {
 	ForwardProp(input *mat.Dense) *mat.Dense
+	BackwardProp(input *mat.Dense) *mat.Dense
 }
 
 type SequentialModel struct {
@@ -28,4 +30,13 @@ func (m *SequentialModel) Evaluate(input []float64) *mat.Dense {
 	}
 
 	return curY
+}
+
+func (m *SequentialModel) Train(example []float64, label float64) {
+	outcome := m.Evaluate(example)
+	actual := mat.NewDense(1, 1, []float64{label})
+
+	error := MeanSquaredErrorLoss(outcome, actual)
+	PrintMatrix(outcome, "Outcome")
+	fmt.Println(error)
 }

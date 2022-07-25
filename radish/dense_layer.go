@@ -25,13 +25,18 @@ func NewDenseLayer(inputs, outputs int, activation string) *DenseLayer {
 	}
 }
 
+// TODO rewrite biases to https://youtu.be/aircAruvnKk?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi&t=915
 func (l *DenseLayer) ForwardProp(input *mat.Dense) *mat.Dense {
 	var fullInput, output, activatedOutput mat.Dense
 
 	bias := mat.NewDense(1, 1, []float64{1})
 	fullInput.Augment(input, bias)
 	output.Mul(&fullInput, l.Weights)
-	activatedOutput.Apply(l.activationElem, &output)
+	activatedOutput.Apply(l.activationForward, &output)
 
 	return &activatedOutput
+}
+
+func (l *DenseLayer) BackwardProp(input *mat.Dense) *mat.Dense {
+	return input
 }
