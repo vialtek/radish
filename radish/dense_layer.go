@@ -1,40 +1,31 @@
 package radish
 
 import (
-	"math/rand"
-	"time"
-
 	"gonum.org/v1/gonum/mat"
 )
 
 type DenseLayer struct {
 	activation string
 	Weights    *mat.Dense
+	Biases     *mat.Dense
 }
 
 func NewDenseLayer(inputs, outputs int, activation string) *DenseLayer {
-	rand.Seed(time.Now().UnixNano())
-	randData := make([]float64, (inputs+1)*outputs)
-	for i := range randData {
-		randData[i] = rand.NormFloat64()
-	}
-
 	return &DenseLayer{
 		activation: activation,
-		Weights:    mat.NewDense(inputs+1, outputs, randData),
+		Weights:    mat.NewDense(inputs, outputs, RandArray(inputs * outputs)),
+		Biases:     mat.NewDense(1, outputs, RandArray(outputs)),
 	}
 }
 
-// TODO rewrite biases to https://youtu.be/aircAruvnKk?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi&t=915
 func (l *DenseLayer) ForwardProp(input *mat.Dense) *mat.Dense {
-	var fullInput, output, activatedOutput mat.Dense
+	var output mat.Dense
 
-	bias := mat.NewDense(1, 1, []float64{1})
-	fullInput.Augment(input, bias)
-	output.Mul(&fullInput, l.Weights)
-	activatedOutput.Apply(l.activationForward, &output)
+	output.Mul(input, l.Weights)
+	output.Add(&output, l.Biases)
+	output.Apply(l.activationForward, &output)
 
-	return &activatedOutput
+	return &output
 }
 
 func (l *DenseLayer) BackwardProp(input *mat.Dense) *mat.Dense {
