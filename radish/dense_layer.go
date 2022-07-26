@@ -10,7 +10,7 @@ type DenseLayer struct {
 	Biases     *mat.Dense
 	optimizer  *Sgd
 
-	storedTensor mat.Dense
+	forwardTensor mat.Dense
 }
 
 func NewDenseLayer(inputs, outputs int, activation string) *DenseLayer {
@@ -29,7 +29,7 @@ func (l *DenseLayer) ForwardProp(input *mat.Dense) *mat.Dense {
 	output.Add(&output, l.Biases)
 	output.Apply(l.activationForward, &output)
 
-	l.storedTensor.Copy(input)
+	l.forwardTensor.Copy(input)
 	return &output
 }
 
@@ -38,7 +38,7 @@ func (l *DenseLayer) BackwardProp(input *mat.Dense) *mat.Dense {
 	var dL_dy, dy_dw, dy_dx, dL_dw, dL_dx mat.Dense
 
 	dL_dy.Copy(input)
-	dy_dw.Copy(&l.storedTensor)
+	dy_dw.Copy(&l.forwardTensor)
 	dy_dx.Copy(l.Weights)
 
 	dL_dw.Mul(dy_dw.T(), &dL_dy)
