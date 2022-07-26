@@ -8,6 +8,7 @@ type DenseLayer struct {
 	activation string
 	Weights    *mat.Dense
 	Biases     *mat.Dense
+	optimizer  *Sgd
 
 	forwardIn   mat.Dense
 	forwardOut  mat.Dense
@@ -20,6 +21,7 @@ func NewDenseLayer(inputs, outputs int, activation string) *DenseLayer {
 		activation: activation,
 		Weights:    mat.NewDense(inputs, outputs, RandArray(inputs*outputs)),
 		Biases:     mat.NewDense(1, outputs, RandArray(outputs)),
+		optimizer:  NewSgd(),
 	}
 }
 
@@ -48,7 +50,7 @@ func (l *DenseLayer) BackwardProp(input *mat.Dense) *mat.Dense {
 	dy_dx.Copy(l.Weights)
 
 	dL_dw.Mul(dy_dw.T(), &dL_dy)
-	// TODO: update weights here
+	l.optimizer.Update(l.Weights, &dL_dw)
 
 	dL_dx.Mul(&dL_dy, dy_dx.T())
 
