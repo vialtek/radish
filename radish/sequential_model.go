@@ -32,9 +32,9 @@ func (m *SequentialModel) Evaluate(input []float64) *mat.Dense {
 	return curY
 }
 
-func (m *SequentialModel) Train(example []float64, label float64) {
+func (m *SequentialModel) Train(example []float64, labels []float64) {
 	outcome := m.Evaluate(example)
-	actual := mat.NewDense(1, 1, []float64{1})
+	actual := mat.NewDense(1, len(labels), labels)
 
 	error := SquareLossForward(outcome, actual)
 	fmt.Println("Error: ", error)

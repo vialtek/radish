@@ -6,7 +6,8 @@ import (
 
 func main() {
 	trainExamples := [][]float64{{0, 0, 1}, {1, 1, 1}, {1, 0, 1}, {0, 1, 0}}
-	trainLabels := []float64{0, 1, 1, 0}
+	// TODO: encode labels to result vector
+	trainLabels := [][]float64{{0}, {1}, {1}, {0}}
 
 	model := radish.NewSequentialModel()
 	model.AddLayer(radish.NewDenseLayer(3, 1, "tanh"))
