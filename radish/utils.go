@@ -13,6 +13,14 @@ func PrintMatrix(matrix *mat.Dense, label string) {
 	fmt.Printf("%v: \n%v\n\n", label, formatted)
 }
 
+func CopyMatrix(matrix *mat.Dense) *mat.Dense {
+	rows, columns := matrix.Dims()
+	newMatrix := mat.NewDense(rows, columns, nil)
+	newMatrix.Copy(matrix)
+
+	return newMatrix
+}
+
 func RandArray(elementCount int) []float64 {
 	rand.Seed(time.Now().UnixNano())
 

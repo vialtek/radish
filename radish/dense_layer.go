@@ -1,6 +1,7 @@
 package radish
 
 import (
+	"fmt"
 	"gonum.org/v1/gonum/mat"
 )
 
@@ -10,7 +11,7 @@ type DenseLayer struct {
 	Biases     *mat.Dense
 	optimizer  *Sgd
 
-	forwardTensor mat.Dense
+	forwardTensor *mat.Dense
 }
 
 func NewDenseLayer(inputs, outputs int, activation string) *DenseLayer {
@@ -29,22 +30,23 @@ func (l *DenseLayer) ForwardProp(input *mat.Dense) *mat.Dense {
 	output.Add(&output, l.Biases)
 	output.Apply(l.activationForward, &output)
 
-	l.forwardTensor.Copy(input)
+	l.forwardTensor = CopyMatrix(input)
 	return &output
 }
 
 // FIXME: activation is not accounted
+// FIXME: update bias
 func (l *DenseLayer) BackwardProp(input *mat.Dense) *mat.Dense {
-	var dL_dy, dy_dw, dy_dx, dL_dw, dL_dx mat.Dense
+	var dL_dw, dL_dx mat.Dense
 
-	dL_dy.Copy(input)
-	dy_dw.Copy(&l.forwardTensor)
-	dy_dx.Copy(l.Weights)
+	dL_dy := CopyMatrix(input)
+	dy_dw := CopyMatrix(l.forwardTensor)
+	dy_dx := CopyMatrix(l.Weights)
 
-	dL_dw.Mul(dy_dw.T(), &dL_dy)
+	dL_dw.Mul(dy_dw.T(), dL_dy)
 	l.optimizer.Update(l.Weights, &dL_dw)
 
-	dL_dx.Mul(&dL_dy, dy_dx.T())
+	dL_dx.Mul(dL_dy, dy_dx.T())
 
 	return &dL_dx
 }
