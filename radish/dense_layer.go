@@ -1,7 +1,6 @@
 package radish
 
 import (
-	"fmt"
 	"gonum.org/v1/gonum/mat"
 )
 
@@ -19,7 +18,7 @@ func NewDenseLayer(inputs, outputs int, activation string) *DenseLayer {
 		activation: activation,
 		Weights:    mat.NewDense(inputs, outputs, RandArray(inputs*outputs)),
 		Biases:     mat.NewDense(1, outputs, RandArray(outputs)),
-		optimizer:  NewSgd(),
+		optimizer:  NewSgd(0.001),
 	}
 }
 
@@ -44,7 +43,10 @@ func (l *DenseLayer) BackwardProp(input *mat.Dense) *mat.Dense {
 	dy_dx := CopyMatrix(l.Weights)
 
 	dL_dw.Mul(dy_dw.T(), dL_dy)
+	PrintMatrix(l.Weights, "Before update")
+	PrintMatrix(&dL_dw, "dl_dw")
 	l.optimizer.Update(l.Weights, &dL_dw)
+	PrintMatrix(l.Weights, "After update")
 
 	dL_dx.Mul(dL_dy, dy_dx.T())
 

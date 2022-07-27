@@ -12,12 +12,23 @@ type Sgd struct {
 	learningRate float64
 }
 
-func NewSgd() *Sgd {
+func NewSgd(learningRate float64) *Sgd {
 	return &Sgd{
-		learningRate: 0.00001,
+		learningRate: learningRate,
 	}
 }
 
 func (o *Sgd) Update(weights, change *mat.Dense) {
-	// TODO: update the weights
+	rows, cols := change.Dims()
+
+	rateArr := make([]float64, rows * cols)
+	for i := 0; i < rows * cols; i++{
+		rateArr[i] = o.learningRate
+	}
+
+	rateMatrix := mat.NewDense(rows, cols, rateArr)
+
+	var changeMatrix mat.Dense
+	changeMatrix.MulElem(change, rateMatrix)
+	weights.Sub(weights, &changeMatrix)
 }
