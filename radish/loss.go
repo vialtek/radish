@@ -1,22 +1,18 @@
 package radish
 
 import (
-	"gonum.org/v1/gonum/mat"
 	"math"
+
+	"gonum.org/v1/gonum/mat"
 )
 
-func MeanSquaredErrorLoss(predicted, actual *mat.Dense) float64 {
-	var sumSquareError float64 = 0.0
+func SquareLossForward(predicted, actual *mat.Dense) []float64 {
 	_, columns := predicted.Dims()
+	errors := make([]float64, columns)
 
 	for i := 0; i < columns; i++ {
-		sumSquareError += math.Pow(predicted.RawRowView(0)[i]-actual.RawRowView(0)[i], 2)
+		errors[i] = math.Pow(predicted.RawRowView(0)[i]-actual.RawRowView(0)[i], 2)
 	}
 
-	if sumSquareError == 0 {
-		return 0
-	}
-
-	meanSquareError := 1.0 / (float64(columns) * sumSquareError)
-	return meanSquareError
+	return errors
 }
