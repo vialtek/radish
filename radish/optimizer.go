@@ -21,8 +21,8 @@ func NewSgd(learningRate float64) *Sgd {
 func (o *Sgd) Update(weights, change *mat.Dense) {
 	rows, cols := change.Dims()
 
-	rateArr := make([]float64, rows * cols)
-	for i := 0; i < rows * cols; i++{
+	rateArr := make([]float64, rows*cols)
+	for i := 0; i < rows*cols; i++ {
 		rateArr[i] = o.learningRate
 	}
 

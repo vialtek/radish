@@ -36,12 +36,18 @@ func (m *SequentialModel) Train(example []float64, labels []float64) {
 	outcome := m.Evaluate(example)
 	actual := mat.NewDense(1, len(labels), labels)
 
-	error := SquareLossForward(outcome, actual)
-
 	curGrad := SquareLossBackward(outcome, actual)
 	// Iterate backwards
 	for i := len(m.layers) - 1; i >= 0; i-- {
 		curGrad = m.layers[i].BackwardProp(curGrad)
 	}
-	fmt.Println("Error: ", error)
+}
+
+func (m *SequentialModel) Fit(examples [][]float64, labels [][]float64, epochs int) {
+	for epoch := 1; epoch <= epochs; epoch++ {
+		fmt.Println("Epoch: ", epoch, "/", epochs)
+		for i, example := range examples {
+			m.Train(example, labels[i])
+		}
+	}
 }

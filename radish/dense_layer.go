@@ -43,10 +43,10 @@ func (l *DenseLayer) BackwardProp(input *mat.Dense) *mat.Dense {
 	dy_dx := CopyMatrix(l.Weights)
 
 	dL_dw.Mul(dy_dw.T(), dL_dy)
-	PrintMatrix(l.Weights, "Before update")
-	PrintMatrix(&dL_dw, "dl_dw")
+	//PrintMatrix(l.Weights, "Before update")
+	//PrintMatrix(&dL_dw, "dl_dw")
 	l.optimizer.Update(l.Weights, &dL_dw)
-	PrintMatrix(l.Weights, "After update")
+	//PrintMatrix(l.Weights, "After update")
 
 	dL_dx.Mul(dL_dy, dy_dx.T())
 
