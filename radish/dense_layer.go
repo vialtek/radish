@@ -33,8 +33,7 @@ func (l *DenseLayer) ForwardProp(input *mat.Dense) *mat.Dense {
 	return &output
 }
 
-// FIXME: activation is not accounted
-// FIXME: update bias
+// FIXME: activation is not accounted (also for biases)
 func (l *DenseLayer) BackwardProp(input *mat.Dense) *mat.Dense {
 	var dL_dw, dL_dx mat.Dense
 
@@ -43,10 +42,11 @@ func (l *DenseLayer) BackwardProp(input *mat.Dense) *mat.Dense {
 	dy_dx := CopyMatrix(l.Weights)
 
 	dL_dw.Mul(dy_dw.T(), dL_dy)
-	//PrintMatrix(l.Weights, "Before update")
+	//PrintMatrix(dL_dy, "dl_dy")
 	//PrintMatrix(&dL_dw, "dl_dw")
+	//PrintMatrix(l.forwardTensor, "Forward sensor")
 	l.optimizer.Update(l.Weights, &dL_dw)
-	//PrintMatrix(l.Weights, "After update")
+	l.optimizer.Update(l.Biases, dL_dy)
 
 	dL_dx.Mul(dL_dy, dy_dx.T())
 
