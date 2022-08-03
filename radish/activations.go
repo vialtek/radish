@@ -2,10 +2,26 @@ package radish
 
 import (
 	"math"
+
+	"gonum.org/v1/gonum/mat"
 )
 
-func (l *DenseLayer) activationForward(i, j int, elem float64) float64 {
-	switch l.activation {
+func ActivationForward(input *mat.Dense, activation string) *mat.Dense {
+	output := CopyMatrix(input)
+	rows, cols := output.Dims()
+
+	for i := 0; i < rows; i++ {
+		for j := 0; j < cols; j++ {
+			activatedElem := activateElement(input.At(i, j), activation)
+			output.Set(i, j, activatedElem)
+		}
+	}
+
+	return output
+}
+
+func activateElement(elem float64, activation string) float64 {
+	switch activation {
 	case "relu":
 		return relu(elem)
 	case "sigmoid":
