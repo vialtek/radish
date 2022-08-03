@@ -32,11 +32,15 @@ func (l *DenseLayer) ForwardProp(input *mat.Dense) *mat.Dense {
 	return ActivationForward(&output, l.activation)
 }
 
-// FIXME: activation is not accounted (also for biases)
 func (l *DenseLayer) BackwardProp(input *mat.Dense) *mat.Dense {
 	var dL_dw, dL_dx mat.Dense
 
+	dL_activated := ActivationBackward(input, l.forwardTensor, l.activation)
+	PrintMatrix(dL_activated, "From activation")
+	PrintMatrix(input, "Input")
+
 	dL_dy := CopyMatrix(input)
+
 	dy_dw := CopyMatrix(l.forwardTensor)
 	dy_dx := CopyMatrix(l.Weights)
 

@@ -20,6 +20,22 @@ func ActivationForward(input *mat.Dense, activation string) *mat.Dense {
 	return output
 }
 
+func ActivationBackward(backwardTensor, forwardTensor *mat.Dense, activation string) *mat.Dense {
+	var output mat.Dense
+	d_forward := CopyMatrix(forwardTensor)
+
+	rows, cols := forwardTensor.Dims()
+	for i := 0; i < rows; i++ {
+		for j := 0; j < cols; j++ {
+			primeElem := activatePrimeElement(forwardTensor.At(i, j), activation)
+			d_forward.Set(i, j, primeElem)
+		}
+	}
+
+	output.Mul(backwardTensor, d_forward)
+	return &output
+}
+
 func activateElement(elem float64, activation string) float64 {
 	switch activation {
 	case "relu":
@@ -33,8 +49,8 @@ func activateElement(elem float64, activation string) float64 {
 	}
 }
 
-func (l *DenseLayer) activationBackward(i, j int, elem float64) float64 {
-	switch l.activation {
+func activatePrimeElement(elem float64, activation string) float64 {
+	switch activation {
 	case "relu":
 		return reluPrime(elem)
 	case "sigmoid":
