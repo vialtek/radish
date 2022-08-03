@@ -35,19 +35,13 @@ func (l *DenseLayer) ForwardProp(input *mat.Dense) *mat.Dense {
 func (l *DenseLayer) BackwardProp(input *mat.Dense) *mat.Dense {
 	var dL_dw, dL_dx mat.Dense
 
-	dL_activated := ActivationBackward(input, l.forwardTensor, l.activation)
-	PrintMatrix(dL_activated, "From activation")
-	PrintMatrix(input, "Input")
-
 	dL_dy := CopyMatrix(input)
-
+	//dL_activated := ActivationBackward(input, l.forwardTensor, l.activation)
 	dy_dw := CopyMatrix(l.forwardTensor)
 	dy_dx := CopyMatrix(l.Weights)
 
 	dL_dw.Mul(dy_dw.T(), dL_dy)
-	PrintMatrix(dL_dy, "dl_dy")
-	PrintMatrix(&dL_dw, "dl_dw")
-	PrintMatrix(l.forwardTensor, "Forward sensor")
+
 	l.optimizer.Update(l.Weights, &dL_dw)
 	l.optimizer.Update(l.Biases, dL_dy)
 
