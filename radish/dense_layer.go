@@ -36,7 +36,8 @@ func (l *DenseLayer) BackwardProp(input *mat.Dense) *mat.Dense {
 	var dL_dw, dL_dx mat.Dense
 
 	dL_dy := CopyMatrix(input)
-	//dL_activated := ActivationBackward(input, l.forwardTensor, l.activation)
+	dL_activated := ActivationBackward(input, l.forwardTensor, l.activation)
+	PrintMatrix(dL_activated, "Activated")
 	dy_dw := CopyMatrix(l.forwardTensor)
 	dy_dx := CopyMatrix(l.Weights)
 
