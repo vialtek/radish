@@ -116,7 +116,7 @@ func (l *SigmoidActivationLayer) BackwardProp(input *mat.Dense) *mat.Dense {
 	return &output
 }
 
-type IdentityActivationLayer struct {}
+type IdentityActivationLayer struct{}
 
 func (l *IdentityActivationLayer) ForwardProp(input *mat.Dense) *mat.Dense {
 	return input
