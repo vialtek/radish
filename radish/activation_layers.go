@@ -5,7 +5,6 @@ import (
 )
 
 func NewActivationLayer(activation string) layer {
-	// TODO: default should return id activation layer => input = output
 	switch activation {
 	case "relu":
 		return &ReluActivationLayer{}
@@ -14,7 +13,7 @@ func NewActivationLayer(activation string) layer {
 	case "sigmoid":
 		return &SigmoidActivationLayer{}
 	default:
-		return &ReluActivationLayer{}
+		return &IdentityActivationLayer{}
 	}
 }
 
@@ -115,4 +114,14 @@ func (l *SigmoidActivationLayer) BackwardProp(input *mat.Dense) *mat.Dense {
 
 	output.Mul(input, d_forward)
 	return &output
+}
+
+type IdentityActivationLayer struct {}
+
+func (l *IdentityActivationLayer) ForwardProp(input *mat.Dense) *mat.Dense {
+	return input
+}
+
+func (l *IdentityActivationLayer) BackwardProp(input *mat.Dense) *mat.Dense {
+	return input
 }
