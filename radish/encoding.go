@@ -29,10 +29,7 @@ func tokenizeLabels(labels []string) map[string]int {
 }
 
 func (e *OneHotEncoder) Encode(label string) []float64 {
-	vector := make([]float64, e.count)
-	for i := 0; i < len(vector); i++ {
-		vector[i] = 0
-	}
+	vector := ZeroArray(e.count)
 
 	categoryId, found := e.labels[label]
 	if found {
