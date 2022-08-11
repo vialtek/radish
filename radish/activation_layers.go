@@ -2,7 +2,6 @@ package radish
 
 import (
 	"gonum.org/v1/gonum/mat"
-	"fmt"
 )
 
 func NewActivationLayer(activation string) layer {
@@ -44,7 +43,7 @@ func (l *ReluActivationLayer) BackwardProp(input *mat.Dense) *mat.Dense {
 	rows, cols := l.forwardTensor.Dims()
 	for i := 0; i < rows; i++ {
 		for j := 0; j < cols; j++ {
-			d_forward.Set(i, j, reluPrime(l.forwardTensor.At(i,j)))
+			d_forward.Set(i, j, reluPrime(l.forwardTensor.At(i, j)))
 		}
 	}
 
@@ -77,7 +76,7 @@ func (l *TanhActivationLayer) BackwardProp(input *mat.Dense) *mat.Dense {
 	rows, cols := l.forwardTensor.Dims()
 	for i := 0; i < rows; i++ {
 		for j := 0; j < cols; j++ {
-			d_forward.Set(i, j, tanhPrime(l.forwardTensor.At(i,j)))
+			d_forward.Set(i, j, tanhPrime(l.forwardTensor.At(i, j)))
 		}
 	}
 
@@ -110,7 +109,7 @@ func (l *SigmoidActivationLayer) BackwardProp(input *mat.Dense) *mat.Dense {
 	rows, cols := l.forwardTensor.Dims()
 	for i := 0; i < rows; i++ {
 		for j := 0; j < cols; j++ {
-			d_forward.Set(i, j, tanhPrime(l.forwardTensor.At(i,j)))
+			d_forward.Set(i, j, tanhPrime(l.forwardTensor.At(i, j)))
 		}
 	}
 

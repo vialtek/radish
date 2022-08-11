@@ -1,8 +1,8 @@
 package radish
 
 import (
-	"testing"
 	"gonum.org/v1/gonum/mat"
+	"testing"
 )
 
 func TestReluActivationForward(t *testing.T) {
