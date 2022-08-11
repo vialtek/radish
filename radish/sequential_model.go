@@ -18,8 +18,9 @@ func NewSequentialModel() *SequentialModel {
 	return &SequentialModel{}
 }
 
-func (m *SequentialModel) AddLayer(newLayer layer) {
-	m.layers = append(m.layers, newLayer)
+func (m *SequentialModel) AddLayer(inputs, outputs int, activation string) {
+	denseLayer := NewDenseLayer(inputs, outputs, activation)
+	m.layers = append(m.layers, denseLayer)
 }
 
 func (m *SequentialModel) Evaluate(input []float64) *mat.Dense {
