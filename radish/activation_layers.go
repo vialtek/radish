@@ -2,6 +2,7 @@ package radish
 
 import (
 	"gonum.org/v1/gonum/mat"
+	"fmt"
 )
 
 func NewActivationLayer(activation string) layer {
