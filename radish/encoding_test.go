@@ -15,7 +15,6 @@ func vectorEquals(a, b []float64) bool {
 		}
 	}
 	return true
-
 }
 
 func TestValidEncoding(t *testing.T) {
