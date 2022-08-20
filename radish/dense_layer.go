@@ -5,20 +5,18 @@ import (
 )
 
 type DenseLayer struct {
-	activation string
-	Weights    *mat.Dense
-	Biases     *mat.Dense
-	optimizer  *Sgd
+	Weights   *mat.Dense
+	Biases    *mat.Dense
+	optimizer *Sgd
 
 	forwardTensor *mat.Dense
 }
 
-func NewDenseLayer(inputs, outputs int, activation string) *DenseLayer {
+func NewDenseLayer(inputs, outputs int) *DenseLayer {
 	return &DenseLayer{
-		activation: activation,
-		Weights:    mat.NewDense(inputs, outputs, RandArray(inputs*outputs)),
-		Biases:     mat.NewDense(1, outputs, RandArray(outputs)),
-		optimizer:  NewSgd(0.001),
+		Weights:   mat.NewDense(inputs, outputs, RandArray(inputs*outputs)),
+		Biases:    mat.NewDense(1, outputs, RandArray(outputs)),
+		optimizer: NewSgd(0.001),
 	}
 }
 
@@ -29,15 +27,13 @@ func (l *DenseLayer) ForwardProp(input *mat.Dense) *mat.Dense {
 	output.Add(&output, l.Biases)
 
 	l.forwardTensor = CopyMatrix(input)
-	return ActivationForward(&output, l.activation)
+	return &output
 }
 
 func (l *DenseLayer) BackwardProp(input *mat.Dense) *mat.Dense {
 	var dL_dw, dL_dx mat.Dense
 
 	dL_dy := CopyMatrix(input)
-	dL_activated := ActivationBackward(input, l.forwardTensor, l.activation)
-	PrintMatrix(dL_activated, "Activated")
 	dy_dw := CopyMatrix(l.forwardTensor)
 	dy_dx := CopyMatrix(l.Weights)
 
