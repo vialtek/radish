@@ -12,7 +12,7 @@ func main() {
 	model.AddLayer(2, 3, "tanh")
 	model.AddLayer(3, 1, "tanh")
 
-	model.Fit(trainExamples, trainLabels, 10000)
+	model.Fit(trainExamples, trainLabels, 5)
 
 	modelOutput := model.Evaluate([]float64{1, 0})
 	radish.PrintMatrix(modelOutput, "Output (1)")
