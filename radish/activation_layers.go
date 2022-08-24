@@ -79,7 +79,7 @@ func (l *TanhActivationLayer) BackwardProp(input *mat.Dense) *mat.Dense {
 		}
 	}
 
-	output.Mul(input, d_forward)
+	output.MulElem(input, d_forward)
 	return &output
 }
 
