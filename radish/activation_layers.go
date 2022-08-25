@@ -116,6 +116,37 @@ func (l *SigmoidActivationLayer) BackwardProp(input *mat.Dense) *mat.Dense {
 	return &output
 }
 
+type SoftmaxActivationLayer struct {
+	forwardTensor *mat.Dense
+}
+
+func (l *SoftmaxActivationLayer) ForwardProp(input *mat.Dense) *mat.Dense {
+	l.forwardTensor = CopyMatrix(input)
+
+	var output mat.Dense
+	output.Exp(input)
+
+	sum := 0.0
+	rows, cols := output.Dims()
+	for i := 0; i < rows; i++ {
+		for j := 0; j < cols; j++ {
+			sum += output.At(i, j)
+		}
+	}
+
+	for i := 0; i < rows; i++ {
+		for j := 0; j < cols; j++ {
+			output.Set(i, j, output.At(i, j)/sum)
+		}
+	}
+
+	return &output
+}
+
+func (l *SoftmaxActivationLayer) BackwardProp(input *mat.Dense) *mat.Dense {
+	return input
+}
+
 type IdentityActivationLayer struct{}
 
 func (l *IdentityActivationLayer) ForwardProp(input *mat.Dense) *mat.Dense {
