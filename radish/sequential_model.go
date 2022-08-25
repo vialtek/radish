@@ -18,7 +18,7 @@ func NewSequentialModel() *SequentialModel {
 	return &SequentialModel{}
 }
 
-func (m *SequentialModel) AddLayer(inputs, outputs int, activation string) {
+func (m *SequentialModel) AddDenseLayer(inputs, outputs int, activation string) {
 	denseLayer := NewDenseLayer(inputs, outputs)
 	m.layers = append(m.layers, denseLayer)
 

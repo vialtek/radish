@@ -9,8 +9,8 @@ func main() {
 	trainLabels := [][]float64{{0}, {1}, {1}, {0}}
 
 	model := radish.NewSequentialModel()
-	model.AddLayer(2, 3, "relu")
-	model.AddLayer(3, 1, "tanh")
+	model.AddDenseLayer(2, 3, "relu")
+	model.AddDenseLayer(3, 1, "tanh")
 
 	model.Fit(trainExamples, trainLabels, 10000)
 
