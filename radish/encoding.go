@@ -38,3 +38,13 @@ func (e *OneHotEncoder) Encode(label string) []float64 {
 
 	return vector
 }
+
+func (e *OneHotEncoder) EncodeList(labels []string) [][]float64 {
+	vector := make([][]float64, len(labels))
+
+	for i, val := range labels {
+		vector[i] = e.Encode(val)
+	}
+
+	return vector
+}
