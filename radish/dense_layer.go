@@ -30,19 +30,14 @@ func (l *DenseLayer) ForwardProp(input *mat.Dense) *mat.Dense {
 	return &output
 }
 
-func (l *DenseLayer) BackwardProp(input *mat.Dense) *mat.Dense {
-	var dL_dw, dL_dx mat.Dense
+func (l *DenseLayer) BackwardProp(outputGradient *mat.Dense) *mat.Dense {
+	var weightsGradient, inputGradient mat.Dense
 
-	dL_dy := CopyMatrix(input)
-	dy_dw := CopyMatrix(l.forwardTensor)
-	dy_dx := CopyMatrix(l.Weights)
+	weightsGradient.Mul(outputGradient, l.forwardTensor.T())
+	inputGradient.Mul(l.Weights.T(), outputGradient)
 
-	dL_dw.Mul(dy_dw.T(), dL_dy)
+	l.optimizer.Update(l.Weights, &weightsGradient)
+	l.optimizer.Update(l.Biases, outputGradient)
 
-	l.optimizer.Update(l.Weights, &dL_dw)
-	l.optimizer.Update(l.Biases, dL_dy)
-
-	dL_dx.Mul(dL_dy, dy_dx.T())
-
-	return &dL_dx
+	return &inputGradient
 }
