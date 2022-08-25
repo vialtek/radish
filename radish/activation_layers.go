@@ -12,6 +12,8 @@ func NewActivationLayer(activation string) layer {
 		return &TanhActivationLayer{}
 	case "sigmoid":
 		return &SigmoidActivationLayer{}
+	case "softmax":
+		return &SoftmaxActivationLayer{}
 	default:
 		return &IdentityActivationLayer{}
 	}
