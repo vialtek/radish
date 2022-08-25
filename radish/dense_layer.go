@@ -14,8 +14,8 @@ type DenseLayer struct {
 
 func NewDenseLayer(inputs, outputs int) *DenseLayer {
 	return &DenseLayer{
-		Weights:   mat.NewDense(inputs, outputs, RandArray(inputs*outputs)),
-		Biases:    mat.NewDense(1, outputs, RandArray(outputs)),
+		Weights:   mat.NewDense(outputs, inputs, RandArray(inputs*outputs)),
+		Biases:    mat.NewDense(outputs, 1, RandArray(outputs)),
 		optimizer: NewSgd(0.001),
 	}
 }
@@ -23,7 +23,7 @@ func NewDenseLayer(inputs, outputs int) *DenseLayer {
 func (l *DenseLayer) ForwardProp(input *mat.Dense) *mat.Dense {
 	var output mat.Dense
 
-	output.Mul(input, l.Weights)
+	output.Mul(l.Weights, input)
 	output.Add(&output, l.Biases)
 
 	l.forwardTensor = CopyMatrix(input)
