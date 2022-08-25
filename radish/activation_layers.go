@@ -1,6 +1,7 @@
 package radish
 
 import (
+	"math"
 	"gonum.org/v1/gonum/mat"
 )
 
@@ -123,16 +124,18 @@ type SoftmaxActivationLayer struct {
 }
 
 func (l *SoftmaxActivationLayer) ForwardProp(input *mat.Dense) *mat.Dense {
-	l.forwardTensor = CopyMatrix(input)
+	var output *mat.Dense
 
-	var output mat.Dense
-	output.Exp(input)
+	l.forwardTensor = CopyMatrix(input)
+	output = CopyMatrix(input)
 
 	sum := 0.0
 	rows, cols := output.Dims()
 	for i := 0; i < rows; i++ {
 		for j := 0; j < cols; j++ {
-			sum += output.At(i, j)
+			newVal := math.Exp(output.At(i, j))
+			output.Set(i, j, newVal)
+			sum += newVal
 		}
 	}
 
@@ -142,7 +145,7 @@ func (l *SoftmaxActivationLayer) ForwardProp(input *mat.Dense) *mat.Dense {
 		}
 	}
 
-	return &output
+	return output
 }
 
 func (l *SoftmaxActivationLayer) BackwardProp(input *mat.Dense) *mat.Dense {

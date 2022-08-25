@@ -14,11 +14,12 @@ func main() {
 
 	model := radish.NewSequentialModel(0.01)
 	model.AddDenseLayer(2, 3, "relu")
-	model.AddDenseLayer(3, 2, "relu")
+	model.AddDenseLayer(3, 2, "softmax")
 
 	fmt.Println(encodedLabels)
 
-	model.Fit(trainExamples, encodedLabels, 1)
+	model.Fit(trainExamples, encodedLabels, 10000)
 
-	fmt.Println("Embedded vector", encoder.Encode("1"))
+	modelOutput := model.Evaluate([]float64{1, 0})
+	radish.PrintMatrix(modelOutput, "Output (should be [0, 1])")
 }

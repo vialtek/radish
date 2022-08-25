@@ -19,6 +19,22 @@ func TestReluActivationForward(t *testing.T) {
 	}
 }
 
+func TestSoftmaxForward(t *testing.T) {
+	softmaxLayer := NewActivationLayer("softmax")
+
+	inputTensor := mat.NewDense(1, 3, []float64{0.7,0.99,1.2})
+	outputTensor := softmaxLayer.ForwardProp(inputTensor)
+
+	sum := 0.0
+	for _, val := range outputTensor.RawRowView(0) {
+		sum += val
+	}
+
+	if sum > 1.0 || sum < 0.9999 {
+		t.Error("Sum of softmax didn't returned 1", outputTensor, sum)
+	}
+}
+
 func TestUnknownActivationFunction(t *testing.T) {
 	unknownActivationLayer := NewActivationLayer("NOTEXISTS")
 
