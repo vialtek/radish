@@ -12,14 +12,18 @@ type layer interface {
 
 type SequentialModel struct {
 	layers []layer
+
+	optimizer *Sgd
 }
 
-func NewSequentialModel() *SequentialModel {
-	return &SequentialModel{}
+func NewSequentialModel(learningRate float64) *SequentialModel {
+	return &SequentialModel{
+		optimizer: NewSgd(learningRate),
+	}
 }
 
 func (m *SequentialModel) AddDenseLayer(inputs, outputs int, activation string) {
-	denseLayer := NewDenseLayer(inputs, outputs)
+	denseLayer := NewDenseLayer(inputs, outputs, m.optimizer)
 	m.layers = append(m.layers, denseLayer)
 
 	activationLayer := NewActivationLayer(activation)

@@ -12,11 +12,11 @@ type DenseLayer struct {
 	forwardTensor *mat.Dense
 }
 
-func NewDenseLayer(inputs, outputs int) *DenseLayer {
+func NewDenseLayer(inputs, outputs int, optimizer *Sgd) *DenseLayer {
 	return &DenseLayer{
 		Weights:   mat.NewDense(outputs, inputs, RandArray(inputs*outputs)),
 		Biases:    mat.NewDense(outputs, 1, RandArray(outputs)),
-		optimizer: NewSgd(0.001),
+		optimizer: optimizer,
 	}
 }
 
