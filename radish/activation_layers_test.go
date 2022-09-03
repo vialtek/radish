@@ -22,7 +22,7 @@ func TestReluActivationForward(t *testing.T) {
 func TestSoftmaxForward(t *testing.T) {
 	softmaxLayer := NewActivationLayer("softmax")
 
-	inputTensor := mat.NewDense(1, 3, []float64{0.7,0.99,1.2})
+	inputTensor := mat.NewDense(1, 3, []float64{0.7, 0.99, 1.2})
 	outputTensor := softmaxLayer.ForwardProp(inputTensor)
 
 	sum := 0.0

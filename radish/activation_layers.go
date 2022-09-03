@@ -1,8 +1,8 @@
 package radish
 
 import (
-	"math"
 	"gonum.org/v1/gonum/mat"
+	"math"
 )
 
 func NewActivationLayer(activation string) layer {
@@ -121,6 +121,7 @@ func (l *SigmoidActivationLayer) BackwardProp(input *mat.Dense) *mat.Dense {
 
 type SoftmaxActivationLayer struct {
 	forwardTensor *mat.Dense
+	outputTensor  *mat.Dense
 }
 
 func (l *SoftmaxActivationLayer) ForwardProp(input *mat.Dense) *mat.Dense {
@@ -145,11 +146,24 @@ func (l *SoftmaxActivationLayer) ForwardProp(input *mat.Dense) *mat.Dense {
 		}
 	}
 
+	l.outputTensor = CopyMatrix(output)
+
 	return output
 }
 
 func (l *SoftmaxActivationLayer) BackwardProp(input *mat.Dense) *mat.Dense {
-	return input
+	var tmpMatrix, output mat.Dense
+	n, _ := l.outputTensor.Dims()
+
+	tiled := TileMatrix(l.outputTensor, n)
+	identity := IdentityMatrix(n)
+
+	tmpMatrix.Sub(identity, tiled.T())
+	tmpMatrix.MulElem(tiled, &tmpMatrix)
+
+	output.Mul(&tmpMatrix, input)
+
+	return &output
 }
 
 type IdentityActivationLayer struct{}
