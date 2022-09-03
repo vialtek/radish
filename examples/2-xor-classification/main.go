@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/vialtek/radish/radish"
 )
 
@@ -15,8 +14,6 @@ func main() {
 	model := radish.NewSequentialModel(0.01)
 	model.AddDenseLayer(2, 3, "relu")
 	model.AddDenseLayer(3, 2, "softmax")
-
-	fmt.Println(encodedLabels)
 
 	model.Fit(trainExamples, encodedLabels, 10000)
 
