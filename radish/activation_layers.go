@@ -97,7 +97,7 @@ func (l *SigmoidActivationLayer) ForwardProp(input *mat.Dense) *mat.Dense {
 
 	for i := 0; i < rows; i++ {
 		for j := 0; j < cols; j++ {
-			output.Set(i, j, tanh(input.At(i, j)))
+			output.Set(i, j, sigmoid(input.At(i, j)))
 		}
 	}
 
@@ -111,7 +111,7 @@ func (l *SigmoidActivationLayer) BackwardProp(input *mat.Dense) *mat.Dense {
 	rows, cols := l.forwardTensor.Dims()
 	for i := 0; i < rows; i++ {
 		for j := 0; j < cols; j++ {
-			d_forward.Set(i, j, tanhPrime(l.forwardTensor.At(i, j)))
+			d_forward.Set(i, j, sigmoidPrime(l.forwardTensor.At(i, j)))
 		}
 	}
 

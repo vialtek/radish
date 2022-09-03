@@ -9,7 +9,8 @@ func sigmoid(elem float64) float64 {
 }
 
 func sigmoidPrime(elem float64) float64 {
-	return math.Exp(-elem) / (math.Pow(1+math.Exp(-elem), 2))
+	s := sigmoid(elem)
+	return s * (1 - s)
 }
 
 func relu(elem float64) float64 {
