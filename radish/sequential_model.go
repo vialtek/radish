@@ -42,7 +42,7 @@ func (m *SequentialModel) Evaluate(input []float64) *mat.Dense {
 
 func (m *SequentialModel) Train(example []float64, labels []float64) float64 {
 	outcome := m.Evaluate(example)
-	actual := mat.NewDense(1, len(labels), labels)
+	actual := mat.NewDense(len(labels), 1, labels)
 
 	error := SquareLossForward(outcome, actual)
 	curGrad := SquareLossBackward(outcome, actual)

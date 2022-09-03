@@ -21,6 +21,36 @@ func CopyMatrix(matrix *mat.Dense) *mat.Dense {
 	return newMatrix
 }
 
+func IdentityMatrix(size int) *mat.Dense {
+	identityMatrix := mat.NewDense(size, size, nil)
+	for i := 0; i < size; i++ {
+		identityMatrix.Set(i, i, 1)
+	}
+
+	return identityMatrix
+}
+
+func TileMatrix(input *mat.Dense, times int) *mat.Dense {
+	var output mat.Dense
+
+	if times <= 1 {
+		return input
+	}
+
+	for i := 1; i < times; i++ {
+		if i == 1 {
+			output.Augment(input, input)
+		} else {
+			var tmp mat.Dense
+
+			tmp.Augment(&output, input)
+			output = tmp
+		}
+	}
+
+	return &output
+}
+
 func RandArray(elementCount int) []float64 {
 	rand.Seed(time.Now().UnixNano())
 

@@ -49,3 +49,19 @@ func TestEncodingWithUnknowLabel(t *testing.T) {
 		t.Error("oneHotVector is not equal to expectedVector", oneHotVector, expectedVector)
 	}
 }
+
+func TestEncodingListOfLabels(t *testing.T) {
+	labels := []string{"cat", "dog", "rabbit"}
+	encoder := NewOneHotEncoder(labels)
+
+	labelsToEncode := []string{"cat", "dog", "dog"}
+	encodedLabels := encoder.EncodeList(labelsToEncode)
+
+	if len(encodedLabels) != len(labelsToEncode) {
+		t.Error("EncodeList list size do not match", encodedLabels, len(labelsToEncode))
+	}
+
+	if !vectorEquals(encodedLabels[0], encoder.Encode(labelsToEncode[0])) {
+		t.Error("Encoding does not match", encodedLabels[0], encoder.Encode(labelsToEncode[0]))
+	}
+}

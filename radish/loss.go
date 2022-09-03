@@ -7,22 +7,22 @@ import (
 )
 
 func SquareLossForward(predicted, actual *mat.Dense) float64 {
-	_, columns := predicted.Dims()
+	rows, _ := predicted.Dims()
 	error := 0.0
-	for i := 0; i < columns; i++ {
-		error += math.Pow(predicted.RawRowView(0)[i]-actual.RawRowView(0)[i], 2)
+	for i := 0; i < rows; i++ {
+		error += math.Pow(predicted.At(i, 0)-actual.At(i, 0), 2)
 	}
 
-	return (1.0 / float64(columns)) * error
+	return (1.0 / float64(rows)) * error
 }
 
 func SquareLossBackward(predicted, actual *mat.Dense) *mat.Dense {
-	_, columns := predicted.Dims()
-	errors := make([]float64, columns)
+	rows, _ := predicted.Dims()
 
-	for i := 0; i < columns; i++ {
-		errors[i] = 2 * (predicted.RawRowView(0)[i] - actual.RawRowView(0)[i]) / float64(columns)
+	errors := make([]float64, rows)
+	for i := 0; i < rows; i++ {
+		errors[i] = 2 * (predicted.At(i, 0) - actual.At(i, 0)) / float64(rows)
 	}
 
-	return mat.NewDense(1, columns, errors)
+	return mat.NewDense(rows, 1, errors)
 }
