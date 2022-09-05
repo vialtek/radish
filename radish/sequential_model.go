@@ -64,28 +64,34 @@ func (m *SequentialModel) ResultToLabel(output *mat.Dense) string {
 		return ""
 	}
 
-	rows, _ := output.Dims()
-
-	highestIndex := 0
-	highestValue := output.At(0, 0)
-	for i := 0; i < rows; i++ {
-		if output.At(i, 0) > highestValue {
-			highestIndex = i
-			highestValue = output.At(i, 0)
-		}
-	}
-
-	return m.labelEncoder.IndexToLabel(highestIndex)
+	return m.labelEncoder.IndexToLabel(argMax(output))
 }
 
 func (m *SequentialModel) Fit(examples [][]float64, labels [][]float64, epochs int) {
 	for epoch := 1; epoch <= epochs; epoch++ {
 		error := 0.0
+
 		for i, example := range examples {
 			error += m.Train(example, labels[i])
 		}
 
 		meanError := 1.0 / float64(len(examples)) * error
 		fmt.Println("Epoch: ", epoch, "/", epochs, "Error: ", meanError)
+
+		if m.labelEncoder != nil {
+			fmt.Println("Accuary: ", m.AccuracyOfBatch(examples, labels)*100, "%")
+		}
 	}
+}
+
+func (m *SequentialModel) AccuracyOfBatch(examples [][]float64, labels [][]float64) float64 {
+	corrCount := 0
+	for i, example := range examples {
+		result := m.Evaluate(example)
+		if argMax(result) == argMaxArray(labels[i]) {
+			corrCount += 1
+		}
+	}
+
+	return float64(corrCount) / float64(len(examples))
 }

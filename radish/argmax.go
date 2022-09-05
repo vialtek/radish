@@ -4,6 +4,11 @@ import (
 	"gonum.org/v1/gonum/mat"
 )
 
+func argMaxArray(vector []float64) int {
+	mat := mat.NewDense(len(vector), 1, vector)
+	return argMax(mat)
+}
+
 func argMax(vector *mat.Dense) int {
 	r, c := vector.Dims()
 	if c > 1 {

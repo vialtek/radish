@@ -31,3 +31,12 @@ func TestRowsColumnsMissmatch(t *testing.T) {
 		t.Error("argMax should not work with column matrix", highestIndex, -1)
 	}
 }
+
+func TestArgMaxArray(t *testing.T) {
+	vec := []float64{0.2, 0.5, 0.98, 0.2}
+
+	highestIndex := argMaxArray(vec)
+	if highestIndex != 2 {
+		t.Error("argMaxArray is returning wrong index", highestIndex, 2)
+	}
+}
