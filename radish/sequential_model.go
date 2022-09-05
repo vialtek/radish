@@ -13,13 +13,18 @@ type layer interface {
 type SequentialModel struct {
 	layers []layer
 
-	optimizer *Sgd
+	optimizer    *Sgd
+	labelEncoder *OneHotEncoder
 }
 
 func NewSequentialModel(learningRate float64) *SequentialModel {
 	return &SequentialModel{
 		optimizer: NewSgd(learningRate),
 	}
+}
+
+func (m *SequentialModel) AttachLabelEncoder(labelEncoder *OneHotEncoder) {
+	m.labelEncoder = labelEncoder
 }
 
 func (m *SequentialModel) AddDenseLayer(inputs, outputs int, activation string) {
@@ -52,6 +57,25 @@ func (m *SequentialModel) Train(example []float64, labels []float64) float64 {
 	}
 
 	return error
+}
+
+func (m *SequentialModel) ResultToLabel(output *mat.Dense) string {
+	if m.labelEncoder == nil {
+		return ""
+	}
+
+	rows, _ := output.Dims()
+
+	highestIndex := 0
+	highestValue := output.At(0, 0)
+	for i := 0; i < rows; i++ {
+		if output.At(i, 0) > highestValue {
+			highestIndex = i
+			highestValue = output.At(i, 0)
+		}
+	}
+
+	return m.labelEncoder.IndexToLabel(highestIndex)
 }
 
 func (m *SequentialModel) Fit(examples [][]float64, labels [][]float64, epochs int) {
