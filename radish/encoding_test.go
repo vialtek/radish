@@ -65,3 +65,16 @@ func TestEncodingListOfLabels(t *testing.T) {
 		t.Error("Encoding does not match", encodedLabels[0], encoder.Encode(labelsToEncode[0]))
 	}
 }
+
+func TestIndexToLabel(t *testing.T) {
+	labels := []string{"cat", "dog", "rabbit"}
+	encoder := NewOneHotEncoder(labels)
+
+	if encoder.IndexToLabel(2) != "rabbit" {
+		t.Error("IndexToLabel returned wrong label", encoder.IndexToLabel(2), "rabbit")
+	}
+
+	if encoder.IndexToLabel(0) != "cat" {
+		t.Error("IndexToLabel returned wrong label", encoder.IndexToLabel(0), "cat")
+	}
+}

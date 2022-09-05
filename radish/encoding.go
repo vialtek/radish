@@ -2,6 +2,7 @@ package radish
 
 type OneHotEncoder struct {
 	labels map[string]int
+	keys   []string
 	count  int
 }
 
@@ -10,6 +11,7 @@ func NewOneHotEncoder(labels []string) *OneHotEncoder {
 
 	return &OneHotEncoder{
 		labels: tokens,
+		keys:   labelsArray(tokens),
 		count:  len(tokens),
 	}
 }
@@ -26,6 +28,16 @@ func tokenizeLabels(labels []string) map[string]int {
 	}
 
 	return tokenTable
+}
+
+func labelsArray(labels map[string]int) []string {
+	keys := make([]string, len(labels))
+
+	for k, v := range labels {
+		keys[v] = k
+	}
+
+	return keys
 }
 
 func (e *OneHotEncoder) Encode(label string) []float64 {
@@ -47,4 +59,8 @@ func (e *OneHotEncoder) EncodeList(labels []string) [][]float64 {
 	}
 
 	return vector
+}
+
+func (e *OneHotEncoder) IndexToLabel(index int) string {
+	return e.keys[index]
 }
