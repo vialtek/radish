@@ -29,17 +29,18 @@ func loadDataset() ([][]float64, []string) {
 }
 
 func main() {
-	//encoder := radish.NewOneHotEncoder([]string{"M", "V", "N", "H"})
+	encoder := radish.NewOneHotEncoder([]string{"M", "V", "N", "H"})
 
 	examples, labels := loadDataset()
-	fmt.Println(examples)
-	fmt.Println(labels)
+	encodedLabels := encoder.EncodeList(labels)
 
 	model := radish.NewSequentialModel(0.01)
-	model.AddDenseLayer(21, 42, "relu")
-	model.AddDenseLayer(42, 21, "relu")
-	model.AddDenseLayer(21, 4, "softmax")
+	model.AttachLabelEncoder(encoder)
 
+	model.AddDenseLayer(21, 42, "relu")
+	model.AddDenseLayer(42, 4, "softmax")
+
+	model.Fit(examples, encodedLabels, 10000)
 }
 
 func readCSVFile(filePath string) [][]string {
