@@ -51,6 +51,19 @@ func TileMatrix(input *mat.Dense, times int) *mat.Dense {
 	return &output
 }
 
+func ArrayFromMatrix(input *mat.Dense) []float64 {
+	var array []float64
+	r, c := input.Dims()
+
+	for i := 0; i < r; i++ {
+		for j := 0; j < c; j++ {
+			array = append(array, input.At(i, j))
+		}
+	}
+
+	return array
+}
+
 func RandArray(elementCount int) []float64 {
 	rand.Seed(time.Now().UnixNano())
 
