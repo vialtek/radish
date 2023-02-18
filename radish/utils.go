@@ -64,12 +64,12 @@ func ArrayFromMatrix(input *mat.Dense) []float64 {
 	return array
 }
 
-func RandArray(elementCount int) []float64 {
+func RandArray(elementCount int, scalingFactor float64) []float64 {
 	rand.Seed(time.Now().UnixNano())
 
 	randArray := make([]float64, elementCount)
 	for i := range randArray {
-		randArray[i] = rand.NormFloat64()
+		randArray[i] = rand.NormFloat64() * scalingFactor
 	}
 
 	return randArray

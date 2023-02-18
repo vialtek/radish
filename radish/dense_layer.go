@@ -14,8 +14,8 @@ type DenseLayer struct {
 
 func NewDenseLayer(inputs, outputs int, optimizer *Sgd) *DenseLayer {
 	return &DenseLayer{
-		Weights:   mat.NewDense(outputs, inputs, RandArray(inputs*outputs)),
-		Biases:    mat.NewDense(outputs, 1, RandArray(outputs)),
+		Weights:   mat.NewDense(outputs, inputs, RandArray(inputs*outputs, 0.01)),
+		Biases:    mat.NewDense(outputs, 1, RandArray(outputs, 1)),
 		optimizer: optimizer,
 	}
 }
