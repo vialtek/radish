@@ -76,10 +76,10 @@ func RandArray(elementCount int, scalingFactor float64) []float64 {
 }
 
 func ZeroArray(elementCount int) []float64 {
-	randArray := make([]float64, elementCount)
-	for i := range randArray {
-		randArray[i] = 0.0
+	zeroArray := make([]float64, elementCount)
+	for i := range zeroArray {
+		zeroArray[i] = 0.0
 	}
 
-	return randArray
+	return zeroArray
 }
