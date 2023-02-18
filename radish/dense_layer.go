@@ -14,6 +14,7 @@ type DenseLayer struct {
 
 func NewDenseLayer(inputs, outputs int, optimizer *Sgd) *DenseLayer {
 	return &DenseLayer{
+		// TODO: extract weight initialization to own method, remove scaling factor
 		Weights:   mat.NewDense(outputs, inputs, RandArray(inputs*outputs, 0.01)),
 		Biases:    mat.NewDense(outputs, 1, RandArray(outputs, 1)),
 		optimizer: optimizer,
