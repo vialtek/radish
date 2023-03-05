@@ -79,12 +79,12 @@ func (m *SequentialModel) Fit(examples [][]float64, labels [][]float64, epochs i
 		fmt.Println("Epoch: ", epoch, "/", epochs, "Error: ", meanError)
 
 		if m.labelEncoder != nil {
-			fmt.Println("Accuary: ", m.AccuracyOfBatch(examples, labels)*100, "%")
+			fmt.Println("Accuary: ", m.AccuracyOfEpoch(examples, labels)*100, "%")
 		}
 	}
 }
 
-func (m *SequentialModel) AccuracyOfBatch(examples [][]float64, labels [][]float64) float64 {
+func (m *SequentialModel) AccuracyOfEpoch(examples [][]float64, labels [][]float64) float64 {
 	corrCount := 0
 	for i, example := range examples {
 		result := m.Evaluate(example)
