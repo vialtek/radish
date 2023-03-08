@@ -65,3 +65,31 @@ func TestFullBatch(t *testing.T) {
 		t.Error("There should be no next batch available")
 	}
 }
+
+func TestRewindBatch(t *testing.T) {
+	examples := [][]float64{{9, 1}, {2, 3}, {5, 6}, {7, 8}}
+	labels := [][]float64{{0}, {1}, {1}, {0}, {1}}
+
+	batch := NewMinibatch(examples, labels, 2)
+	batch.Next()
+	samples, _ := batch.Next()
+
+	if !vectorEquals(samples[0], []float64{5, 6}) {
+		t.Error("Batch returned unexpected result, it should return {5, 6} and it returned ", samples[0])
+	}
+
+	if batch.HasNext() {
+		t.Error("There should be no next batch available")
+	}
+
+	batch.Rewind()
+	rewindSamples, _ := batch.Next()
+
+	if !vectorEquals(rewindSamples[0], []float64{9, 1}) {
+		t.Error("Batch returned unexpected result, it should return {9, 1} and it returned ", rewindSamples[0])
+	}
+
+	if !batch.HasNext() {
+		t.Error("There should be next batch available")
+	}
+}
