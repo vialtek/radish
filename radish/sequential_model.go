@@ -67,12 +67,18 @@ func (m *SequentialModel) ResultToLabel(output *mat.Dense) string {
 	return m.labelEncoder.IndexToLabel(argMax(output))
 }
 
-func (m *SequentialModel) Fit(examples [][]float64, labels [][]float64, epochs int) {
+func (m *SequentialModel) Fit(examples [][]float64, labels [][]float64, batchSize int, epochs int) {
+	batch := NewMinibatch(examples, labels, batchSize)
+
 	for epoch := 1; epoch <= epochs; epoch++ {
+		batch.Rewind()
 		error := 0.0
 
-		for i, example := range examples {
-			error += m.Train(example, labels[i])
+		for batch.HasNext(){
+			batchExamples, batchLabels := batch.Next()
+			for i, example := range batchExamples {
+				error += m.Train(example, batchLabels[i])
+			}
 		}
 
 		meanError := 1.0 / float64(len(examples)) * error
