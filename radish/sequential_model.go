@@ -45,18 +45,25 @@ func (m *SequentialModel) Evaluate(input []float64) *mat.Dense {
 	return curY
 }
 
-func (m *SequentialModel) Train(example []float64, labels []float64) float64 {
-	outcome := m.Evaluate(example)
-	actual := mat.NewDense(len(labels), 1, labels)
+func (m *SequentialModel) Train(examples [][]float64, labels [][]float64) float64 {
+	totalError := 0.0
 
-	error := SquareLossForward(outcome, actual)
-	curGrad := SquareLossBackward(outcome, actual)
-	// Iterate backwards
-	for i := len(m.layers) - 1; i >= 0; i-- {
-		curGrad = m.layers[i].BackwardProp(curGrad)
+	for i, example := range examples {
+		outcome := m.Evaluate(example)
+		actual := mat.NewDense(len(labels[i]), 1, labels[i])
+
+		error := SquareLossForward(outcome, actual)
+		curGrad := SquareLossBackward(outcome, actual)
+
+		// Iterate backwards
+		for i := len(m.layers) - 1; i >= 0; i-- {
+			curGrad = m.layers[i].BackwardProp(curGrad)
+		}
+
+		totalError += error
 	}
 
-	return error
+	return 1.0 / float64(len(examples)) * totalError
 }
 
 func (m *SequentialModel) ResultToLabel(output *mat.Dense) string {
@@ -72,16 +79,14 @@ func (m *SequentialModel) Fit(examples [][]float64, labels [][]float64, batchSiz
 
 	for epoch := 1; epoch <= epochs; epoch++ {
 		batch.Rewind()
-		error := 0.0
+		epochError := 0.0
 
 		for batch.HasNext(){
 			batchExamples, batchLabels := batch.Next()
-			for i, example := range batchExamples {
-				error += m.Train(example, batchLabels[i])
-			}
+			epochError += m.Train(batchExamples, batchLabels)
 		}
 
-		meanError := 1.0 / float64(len(examples)) * error
+		meanError := 1.0 / float64(len(examples)) * epochError
 		fmt.Println("Epoch: ", epoch, "/", epochs, "Error: ", meanError)
 
 		if m.labelEncoder != nil {
