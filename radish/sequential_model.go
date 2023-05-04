@@ -47,20 +47,35 @@ func (m *SequentialModel) Evaluate(input []float64) *mat.Dense {
 
 func (m *SequentialModel) Train(examples [][]float64, labels [][]float64) float64 {
 	totalError := 0.0
+  errorVectors := make([][]float64, len(examples))
 
+  // 1. Acumulate loss across batch
 	for i, example := range examples {
 		outcome := m.Evaluate(example)
 		actual := mat.NewDense(len(labels[i]), 1, labels[i])
 
 		error := SquareLossForward(outcome, actual)
-		curGrad := SquareLossBackward(outcome, actual)
-
-		// Iterate backwards
-		for i := len(m.layers) - 1; i >= 0; i-- {
-			curGrad = m.layers[i].BackwardProp(curGrad)
-		}
-
 		totalError += error
+
+		errorVectors[i] = SquareLossBackward(outcome, actual)
+	}
+
+	// 2. Calculate mean loss
+	meanErrorGradient := ZeroArray(len(errorVectors[0]))
+	for _, errorVector := range errorVectors {
+		for j := 0; j < len(errorVector); j++ {
+			meanErrorGradient[j] += errorVector[j]
+		}
+	}
+
+	for i := 0; i < len(meanErrorGradient); i++ {
+		meanErrorGradient[i] = 1.0 / float64(len(meanErrorGradient)) * meanErrorGradient[i]
+	}
+
+	// 3. Propagate error gradient
+	lossGradient := mat.NewDense(len(meanErrorGradient), 1, meanErrorGradient)
+	for i := len(m.layers) - 1; i >= 0; i-- {
+		lossGradient = m.layers[i].BackwardProp(lossGradient)
 	}
 
 	return totalError
