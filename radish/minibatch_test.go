@@ -36,7 +36,7 @@ func TestOddMinibatch(t *testing.T) {
 		t.Error("Minibatch should return 4 samples, it did returned ", len(samples))
 	}
 
-	if !batch.HasNext(){
+	if !batch.HasNext() {
 		t.Error("There should be next batch available")
 	}
 
@@ -45,7 +45,7 @@ func TestOddMinibatch(t *testing.T) {
 		t.Error("Minibatch should return 1 last sample, it did returned ", len(secondSamples))
 	}
 
-	if batch.HasNext(){
+	if batch.HasNext() {
 		t.Error("There should be no next batch available")
 	}
 }

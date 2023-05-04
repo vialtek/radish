@@ -47,9 +47,9 @@ func (m *SequentialModel) Evaluate(input []float64) *mat.Dense {
 
 func (m *SequentialModel) Train(examples [][]float64, labels [][]float64) float64 {
 	totalError := 0.0
-  errorVectors := make([][]float64, len(examples))
+	errorVectors := make([][]float64, len(examples))
 
-  // 1. Acumulate loss across batch
+	// 1. Acumulate loss across batch
 	for i, example := range examples {
 		outcome := m.Evaluate(example)
 		actual := mat.NewDense(len(labels[i]), 1, labels[i])
@@ -96,7 +96,7 @@ func (m *SequentialModel) Fit(examples [][]float64, labels [][]float64, batchSiz
 		batch.Rewind()
 		epochError := 0.0
 
-		for batch.HasNext(){
+		for batch.HasNext() {
 			batchExamples, batchLabels := batch.Next()
 			epochError += m.Train(batchExamples, batchLabels)
 		}
