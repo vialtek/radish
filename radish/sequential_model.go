@@ -63,7 +63,7 @@ func (m *SequentialModel) Train(examples [][]float64, labels [][]float64) float6
 		totalError += error
 	}
 
-	return 1.0 / float64(len(examples)) * totalError
+	return totalError
 }
 
 func (m *SequentialModel) ResultToLabel(output *mat.Dense) string {
