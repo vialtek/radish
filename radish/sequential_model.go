@@ -14,12 +14,14 @@ type SequentialModel struct {
 	layers []layer
 
 	optimizer    *Sgd
+	lossFunction lossFunction
 	labelEncoder *OneHotEncoder
 }
 
-func NewSequentialModel(learningRate float64) *SequentialModel {
+func NewSequentialModel(learningRate float64, lossFunction string) *SequentialModel {
 	return &SequentialModel{
-		optimizer: NewSgd(learningRate),
+		optimizer:    NewSgd(learningRate),
+		lossFunction: NewLossFunction(lossFunction),
 	}
 }
 
@@ -54,10 +56,10 @@ func (m *SequentialModel) Train(examples [][]float64, labels [][]float64) float6
 		outcome := m.Evaluate(example)
 		actual := mat.NewDense(len(labels[i]), 1, labels[i])
 
-		error := SquareLossForward(outcome, actual)
+		error := m.lossFunction.Forward(outcome, actual)
 		totalError += error
 
-		errorVectors[i] = SquareLossBackward(outcome, actual)
+		errorVectors[i] = m.lossFunction.Backward(outcome, actual)
 	}
 
 	// 2. Calculate mean loss
