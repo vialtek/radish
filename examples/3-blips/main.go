@@ -40,7 +40,7 @@ func main() {
 	model.AddDenseLayer(21, 42, "relu")
 	model.AddDenseLayer(42, 4, "softmax")
 
-	model.Fit(examples, encodedLabels, -1, 10000)
+	model.Fit(examples, encodedLabels, 16, 10000)
 }
 
 func readCSVFile(filePath string) [][]string {

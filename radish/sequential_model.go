@@ -69,7 +69,7 @@ func (m *SequentialModel) Train(examples [][]float64, labels [][]float64) float6
 	}
 
 	for i := 0; i < len(meanErrorGradient); i++ {
-		meanErrorGradient[i] = 1.0 / float64(len(meanErrorGradient)) * meanErrorGradient[i]
+		meanErrorGradient[i] = 1.0 / float64(len(errorVectors)) * meanErrorGradient[i]
 	}
 
 	// 3. Propagate error gradient
