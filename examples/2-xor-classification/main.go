@@ -18,7 +18,7 @@ func main() {
 	model.AddDenseLayer(2, 3, "relu")
 	model.AddDenseLayer(3, 2, "softmax")
 
-	model.Fit(trainExamples, encodedLabels, 10000)
+	model.Fit(trainExamples, encodedLabels, -1, 10000)
 
 	modelOutput := model.Evaluate([]float64{1, 0})
 	radish.PrintMatrix(modelOutput, "Model output")

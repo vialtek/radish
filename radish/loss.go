@@ -16,13 +16,16 @@ func SquareLossForward(predicted, actual *mat.Dense) float64 {
 	return (1.0 / float64(rows)) * error
 }
 
-func SquareLossBackward(predicted, actual *mat.Dense) *mat.Dense {
-	rows, _ := predicted.Dims()
+func SquareLossBackward(predicted, actual *mat.Dense) []float64 {
+	// TODO: panic when having more columns then 1 and not in same shape
+	predictedVector := ArrayFromMatrix(predicted)
+	actualVector := ArrayFromMatrix(actual)
+	rows := len(predictedVector)
 
 	errors := make([]float64, rows)
 	for i := 0; i < rows; i++ {
-		errors[i] = 2 * (predicted.At(i, 0) - actual.At(i, 0)) / float64(rows)
+		errors[i] = 2 * (predictedVector[i] - actualVector[i]) / float64(rows)
 	}
 
-	return mat.NewDense(rows, 1, errors)
+	return errors
 }
