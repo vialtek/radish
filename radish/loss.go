@@ -32,7 +32,7 @@ func (l *SquareLoss) Forward(predicted, actual *mat.Dense) float64 {
 		error += math.Pow(predicted.At(i, 0)-actual.At(i, 0), 2)
 	}
 
-	return (1.0 / float64(rows)) * error
+	return 1.0 / float64(rows) * error
 }
 
 func (l *SquareLoss) Backward(predicted, actual *mat.Dense) []float64 {
@@ -58,7 +58,7 @@ func (l *CrossEntropyLoss) Forward(predicted, actual *mat.Dense) float64 {
 		error += actual.At(i, 0) * math.Log(predicted.At(i, 0))
 	}
 
-	return -error
+	return -1.0 / float64(rows) * error
 }
 
 func (l *CrossEntropyLoss) Backward(predicted, actual *mat.Dense) []float64 {

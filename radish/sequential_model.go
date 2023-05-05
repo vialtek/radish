@@ -56,9 +56,7 @@ func (m *SequentialModel) Train(examples [][]float64, labels [][]float64) float6
 		outcome := m.Evaluate(example)
 		actual := mat.NewDense(len(labels[i]), 1, labels[i])
 
-		error := m.lossFunction.Forward(outcome, actual)
-		totalError += error
-
+		totalError += m.lossFunction.Forward(outcome, actual)
 		errorVectors[i] = m.lossFunction.Backward(outcome, actual)
 	}
 
