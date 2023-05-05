@@ -12,7 +12,7 @@ func main() {
 	trainLabels := []string{"0", "1", "1", "0"}
 	encodedLabels := encoder.EncodeList(trainLabels)
 
-	model := radish.NewSequentialModel(0.01)
+	model := radish.NewSequentialModel(0.01, "crossentropy")
 	model.AttachLabelEncoder(encoder)
 
 	model.AddDenseLayer(2, 3, "relu")

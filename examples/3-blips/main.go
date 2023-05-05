@@ -34,7 +34,7 @@ func main() {
 	examples, labels := loadDataset()
 	encodedLabels := encoder.EncodeList(labels)
 
-	model := radish.NewSequentialModel(0.01)
+	model := radish.NewSequentialModel(0.01, "crossentropy")
 	model.AttachLabelEncoder(encoder)
 
 	model.AddDenseLayer(21, 42, "relu")

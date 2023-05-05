@@ -8,7 +8,7 @@ func main() {
 	trainExamples := [][]float64{{0, 0}, {0, 1}, {1, 0}, {1, 1}}
 	trainLabels := [][]float64{{0}, {1}, {1}, {0}}
 
-	model := radish.NewSequentialModel(0.01)
+	model := radish.NewSequentialModel(0.01, "square")
 	model.AddDenseLayer(2, 3, "relu")
 	model.AddDenseLayer(3, 1, "tanh")
 
