@@ -11,7 +11,7 @@ import (
 func loadDataset() ([][]float64, []string) {
 	var examples [][]float64
 
-	csv := readCSVFile("datasets/blips/blips.csv")
+	csv := readCSVFile("data/blips/blips.csv")
 	labels := make([]string, len(csv))
 
 	for i := range csv {

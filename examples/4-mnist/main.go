@@ -27,7 +27,7 @@ func main() {
 func loadDataset() ([][]float64, []string) {
 	var examples [][]float64
 
-	csv := readCSVFile("datasets/mnist/mnist_train.csv")
+	csv := readCSVFile("data/mnist/mnist_train.csv")
 	labels := make([]string, len(csv))
 
 	for i := range csv {
