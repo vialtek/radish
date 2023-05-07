@@ -8,7 +8,7 @@ import (
 func main() {
 	encoder := radish.NewOneHotEncoder([]string{"M", "V", "N", "H"})
 
-	examples, labels := dataset.LoadDataset("data/blips/blips.csv")
+	examples, labels := dataset.LoadCSVDataset("data/blips/blips.csv")
 	encodedLabels := encoder.EncodeList(labels)
 
 	model := radish.NewSequentialModel(0.01, "crossentropy")

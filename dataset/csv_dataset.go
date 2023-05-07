@@ -12,7 +12,7 @@ import (
 // Label is in first row, rest is example
 //
 
-func LoadDataset(filePath string) ([][]float64, []string) {
+func LoadCSVDataset(filePath string) ([][]float64, []string) {
 	var examples [][]float64
 
 	csv := readCSVFile(filePath)
