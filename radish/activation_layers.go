@@ -24,6 +24,22 @@ type ReluActivationLayer struct {
 	forwardTensor *mat.Dense
 }
 
+func relu(elem float64) float64 {
+	if elem < 0 {
+		return 0
+	}
+
+	return elem
+}
+
+func reluPrime(elem float64) float64 {
+	if elem > 0 {
+		return 1
+	}
+
+	return 0
+}
+
 func (l *ReluActivationLayer) ForwardProp(input *mat.Dense) *mat.Dense {
 	l.forwardTensor = CopyMatrix(input)
 	output := CopyMatrix(input)
@@ -57,6 +73,14 @@ type TanhActivationLayer struct {
 	forwardTensor *mat.Dense
 }
 
+func tanh(elem float64) float64 {
+	return math.Tanh(elem)
+}
+
+func tanhPrime(elem float64) float64 {
+	return 1 - math.Pow(math.Tanh(elem), 2)
+}
+
 func (l *TanhActivationLayer) ForwardProp(input *mat.Dense) *mat.Dense {
 	l.forwardTensor = CopyMatrix(input)
 	output := CopyMatrix(input)
@@ -88,6 +112,15 @@ func (l *TanhActivationLayer) BackwardProp(input *mat.Dense) *mat.Dense {
 
 type SigmoidActivationLayer struct {
 	forwardTensor *mat.Dense
+}
+
+func sigmoid(elem float64) float64 {
+	return 1 / (1 + math.Exp(-elem))
+}
+
+func sigmoidPrime(elem float64) float64 {
+	s := sigmoid(elem)
+	return s * (1 - s)
 }
 
 func (l *SigmoidActivationLayer) ForwardProp(input *mat.Dense) *mat.Dense {
