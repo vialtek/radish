@@ -9,12 +9,12 @@ func NewActivationLayer(activation string) layer {
 	switch activation {
 	case "relu":
 		return &ReluActivationLayer{}
+	case "softmax":
+		return &SoftmaxActivationLayer{}
 	case "tanh":
 		return &TanhActivationLayer{}
 	case "sigmoid":
 		return &SigmoidActivationLayer{}
-	case "softmax":
-		return &SoftmaxActivationLayer{}
 	default:
 		return &IdentityActivationLayer{}
 	}
@@ -66,6 +66,53 @@ func (l *ReluActivationLayer) BackwardProp(input *mat.Dense) *mat.Dense {
 	}
 
 	output.MulElem(input, d_forward)
+	return &output
+}
+
+type SoftmaxActivationLayer struct {
+	forwardTensor *mat.Dense
+	outputTensor  *mat.Dense
+}
+
+func (l *SoftmaxActivationLayer) ForwardProp(input *mat.Dense) *mat.Dense {
+	var output *mat.Dense
+
+	l.forwardTensor = CopyMatrix(input)
+	output = CopyMatrix(input)
+
+	sum := 0.0
+	rows, cols := output.Dims()
+	for i := 0; i < rows; i++ {
+		for j := 0; j < cols; j++ {
+			newVal := math.Exp(output.At(i, j))
+			output.Set(i, j, newVal)
+			sum += newVal
+		}
+	}
+
+	for i := 0; i < rows; i++ {
+		for j := 0; j < cols; j++ {
+			output.Set(i, j, output.At(i, j)/sum)
+		}
+	}
+
+	l.outputTensor = CopyMatrix(output)
+
+	return output
+}
+
+func (l *SoftmaxActivationLayer) BackwardProp(input *mat.Dense) *mat.Dense {
+	var tmpMatrix, output mat.Dense
+	n, _ := l.outputTensor.Dims()
+
+	tiled := TileMatrix(l.outputTensor, n)
+	identity := IdentityMatrix(n)
+
+	tmpMatrix.Sub(identity, tiled.T())
+	tmpMatrix.MulElem(tiled, &tmpMatrix)
+
+	output.Mul(&tmpMatrix, input)
+
 	return &output
 }
 
@@ -149,53 +196,6 @@ func (l *SigmoidActivationLayer) BackwardProp(input *mat.Dense) *mat.Dense {
 	}
 
 	output.MulElem(input, d_forward)
-	return &output
-}
-
-type SoftmaxActivationLayer struct {
-	forwardTensor *mat.Dense
-	outputTensor  *mat.Dense
-}
-
-func (l *SoftmaxActivationLayer) ForwardProp(input *mat.Dense) *mat.Dense {
-	var output *mat.Dense
-
-	l.forwardTensor = CopyMatrix(input)
-	output = CopyMatrix(input)
-
-	sum := 0.0
-	rows, cols := output.Dims()
-	for i := 0; i < rows; i++ {
-		for j := 0; j < cols; j++ {
-			newVal := math.Exp(output.At(i, j))
-			output.Set(i, j, newVal)
-			sum += newVal
-		}
-	}
-
-	for i := 0; i < rows; i++ {
-		for j := 0; j < cols; j++ {
-			output.Set(i, j, output.At(i, j)/sum)
-		}
-	}
-
-	l.outputTensor = CopyMatrix(output)
-
-	return output
-}
-
-func (l *SoftmaxActivationLayer) BackwardProp(input *mat.Dense) *mat.Dense {
-	var tmpMatrix, output mat.Dense
-	n, _ := l.outputTensor.Dims()
-
-	tiled := TileMatrix(l.outputTensor, n)
-	identity := IdentityMatrix(n)
-
-	tmpMatrix.Sub(identity, tiled.T())
-	tmpMatrix.MulElem(tiled, &tmpMatrix)
-
-	output.Mul(&tmpMatrix, input)
-
 	return &output
 }
 
