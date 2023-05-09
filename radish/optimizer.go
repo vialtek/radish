@@ -8,14 +8,14 @@ type optimizer interface {
 	Update(weights, change *mat.Dense)
 }
 
-type Sgd struct {
-	learningRate float64
-}
-
-func NewSgd(learningRate float64) *Sgd {
+func NewOptimizer(learningRate float64) optimizer {
 	return &Sgd{
 		learningRate: learningRate,
 	}
+}
+
+type Sgd struct {
+	learningRate float64
 }
 
 func (o *Sgd) Update(weights, change *mat.Dense) {

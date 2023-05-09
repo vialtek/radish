@@ -13,14 +13,14 @@ type layer interface {
 type SequentialModel struct {
 	layers []layer
 
-	optimizer    *Sgd
+	optimizer    optimizer
 	lossFunction lossFunction
 	labelEncoder *OneHotEncoder
 }
 
 func NewSequentialModel(learningRate float64, lossFunction string) *SequentialModel {
 	return &SequentialModel{
-		optimizer:    NewSgd(learningRate),
+		optimizer:    NewOptimizer(learningRate),
 		lossFunction: NewLossFunction(lossFunction),
 	}
 }

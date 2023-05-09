@@ -7,12 +7,12 @@ import (
 type DenseLayer struct {
 	Weights   *mat.Dense
 	Biases    *mat.Dense
-	optimizer *Sgd
+	optimizer optimizer
 
 	forwardTensor *mat.Dense
 }
 
-func NewDenseLayer(inputs, outputs int, optimizer *Sgd) *DenseLayer {
+func NewDenseLayer(inputs, outputs int, optimizer optimizer) *DenseLayer {
 	return &DenseLayer{
 		// TODO: extract weight initialization to own method, remove scaling factor
 		Weights:   mat.NewDense(outputs, inputs, RandArray(inputs*outputs, 0.01)),
